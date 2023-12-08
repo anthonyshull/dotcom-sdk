@@ -1,13 +1,9 @@
 alias MBTA.Api, as: Api
-alias ElixirNebulex.Cache, as: Cache
+alias DotcomSdk.Cache, as: Cache
 
-client = MBTA.Connection.new()
+client = MBTA.Connection.new(base_url: System.get_env("V3_API_URL"))
 
-config = Application.get_env(:elixir_nebulex, ElixirNebulex.Cache)
-
-DynamicSupervisor.start_child(ElixirNebulex.DynamicSupervisor, Cache.Stop)
+DynamicSupervisor.start_child(DotcomSdk.DynamicSupervisor, Cache.Stop)
 
 # Api.Stop.api_web_stop_controller_show(client, "place-sstat")
 # Cache.Stop.api_web_stop_controller_show(client, "place-sstat")
-
-# Benchee.run(%{api: api, cache: cache})

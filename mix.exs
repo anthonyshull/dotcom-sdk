@@ -1,9 +1,9 @@
-defmodule ElixirNebulex.MixProject do
+defmodule DotcomSdk.MixProject do
   use Mix.Project
 
   def project do
     [
-      app: :elixir_nebulex,
+      app: :dotcom_sdk,
       version: "0.1.0",
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
@@ -15,7 +15,7 @@ defmodule ElixirNebulex.MixProject do
   def application do
     [
       extra_applications: [:logger],
-      mod: {ElixirNebulex.Application, []}
+      mod: {DotcomSdk.Application, []}
     ]
   end
 
@@ -23,9 +23,8 @@ defmodule ElixirNebulex.MixProject do
   defp deps do
     [
       {:decorator, "1.4.0"},
-      {:jason, "1.4.1"},
       {:logster, "2.0.0-rc.3"},
-      {:mbta, path: "../mbta"},
+      {:mbta_sdk, git: "git@github.com:anthonyshull/mbta-sdk.git"},
       {:nebulex, "2.5.2"},
       {:nebulex_redis_adapter, "2.3.1"}
     ]

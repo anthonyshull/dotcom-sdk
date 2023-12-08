@@ -1,4 +1,4 @@
-defmodule ElixirNebulex.Application do
+defmodule DotcomSdk.Application do
   @moduledoc false
 
   use Application
@@ -6,7 +6,7 @@ defmodule ElixirNebulex.Application do
   @impl true
   def start(_type, _args) do
     Supervisor.start_link(
-      [{DynamicSupervisor, strategy: :one_for_one, name: ElixirNebulex.DynamicSupervisor}],
+      [{DynamicSupervisor, strategy: :one_for_one, name: DotcomSdk.DynamicSupervisor}],
       strategy: :one_for_one
     )
   end

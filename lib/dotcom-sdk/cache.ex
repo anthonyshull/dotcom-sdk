@@ -1,8 +1,8 @@
-defmodule ElixirNebulex.Cache do
+defmodule DotcomSdk.Cache do
   @moduledoc false
 
   api_modules =
-    :application.get_key(:mbta, :modules)
+    :application.get_key(:mbta_sdk, :modules)
     |> Kernel.elem(1)
     |> Enum.filter(fn module ->
       Kernel.to_string(module) |> String.match?(~r/Api/)
