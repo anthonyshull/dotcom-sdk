@@ -24,9 +24,10 @@ defmodule ElixirNebulex.MixProject do
     [
       {:decorator, "1.4.0"},
       {:jason, "1.4.1"},
+      {:logster, "2.0.0-rc.3"},
+      {:mbta, path: "../mbta"},
       {:nebulex, "2.5.2"},
-      {:nebulex_redis_adapter, "2.3.1"},
-      {:tesla, "1.8.0"}
+      {:nebulex_redis_adapter, "2.3.1"}
     ]
   end
 end
