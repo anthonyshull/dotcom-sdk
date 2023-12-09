@@ -23,7 +23,7 @@ defmodule DotcomSdk.MixProject do
   defp deps do
     [
       {:decorator, "1.4.0"},
-      {:mbta_sdk, git: "git@github.com:anthonyshull/mbta-sdk.git"},
+      {:mbta_sdk, "0.1.0"},
       {:nebulex, "2.5.2"},
       {:nebulex_redis_adapter, "2.3.1"}
     ]
