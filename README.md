@@ -16,15 +16,31 @@ end
 
 The DOTCOM SDK relies on an underlying MBTA SDK; you'll need to configure both.
 
+See more about Redis connection options at https://github.com/cabol/nebulex_redis_adapter.
+
 ```elixir
-# See more about Redis connection options at https://github.com/cabol/nebulex_redis_adapter
 config :dotcom_sdk, DOTCOM.Api,
   conn_opts: [
     host: "127.0.0.1",
     port: 6379
   ]
+```
 
-# See more about Tesla connection options at https://github.com/elixir-tesla/tesla
+You can also set unique TTLs for every submodule and/or function.
+Function settings will override submodule settings.
+The default TTL is :infinity.
+
+```elixir
+config :dotcom_sdk,
+  dotcom_api_stop: 5_000, # sets the DOTCOM.Api.Stop TTL to 5 seconds
+  api_web_stop_controller_show: 10_000 # sets the function specific TTL to 10 seconds
+```
+
+The MBTA SDK uses Tesla for its HTTP handling.
+At a minimum, you'll need to set the base URL.
+See more about Tesla connection options at https://github.com/elixir-tesla/tesla.
+
+```elixir
 config :tesla, MBTA.Connection,
   middleware: [
     {Tesla.Middleware.BaseUrl, System.get_env("V3_API_URL")},
@@ -34,7 +50,7 @@ config :tesla, MBTA.Connection,
 
 Api caches are run separately.
 So, you need to list all of the api modules you want to access as child processes.
-In this example, we want access to Stop information.
+In this example, we just want access to Stop information.
 
 ```elixir
 defmodule MyApp.Application do
@@ -50,6 +66,14 @@ defmodule MyApp.Application do
     Supervisor.start_link(children, opts)
   end
 end
+```
+
+You can use `DOTCOM.Api.submodules()` to return a list of all submodules in the SDK.
+
+```elixir
+# ...
+    Supervisor.start_link(DOTCOM.Api.submodules(), opts)
+# ...
 ```
 
 ## Usage

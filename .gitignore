@@ -24,3 +24,6 @@ elixir_nebulex-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+# We only use config for development.
+/config/
