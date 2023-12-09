@@ -28,7 +28,7 @@ config :dotcom_sdk, DOTCOM.Api,
 
 You can also set unique TTLs for every submodule and/or function.
 Function settings will override submodule settings.
-The default TTL is :infinity.
+The default TTL is `:infinity`.
 
 ```elixir
 config :dotcom_sdk,
