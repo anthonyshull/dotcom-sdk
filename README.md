@@ -1,6 +1,6 @@
 # DOTCOM SDK
 
-An SDK for accessing data underlying https://mbta.com using the [MbtaSdk](https://github.com/anthonyshull/mbta-sdk).
+An SDK for accessing data underlying https://mbta.com using the [MBTA SDK](https://github.com/anthonyshull/mbta-sdk).
 
 ## Installation
 
@@ -14,17 +14,17 @@ end
 
 ## Configuration
 
-The DotcomSdk relies on an underlying MbtaSdk; you'll need to configure both.
+The DOTCOM SDK relies on an underlying MBTA SDK; you'll need to configure both.
 
 ```elixir
-# config/config.exs
-
-config :dotcom_sdk, DotcomSdk.Cache,
+# See more about Redis connection options at https://github.com/cabol/nebulex_redis_adapter
+config :dotcom_sdk, DOTCOM.Api,
   conn_opts: [
     host: "127.0.0.1",
     port: 6379
   ]
 
+# See more about Tesla connection options at https://github.com/elixir-tesla/tesla
 config :tesla, MBTA.Connection,
   middleware: [
     {Tesla.Middleware.BaseUrl, System.get_env("V3_API_URL")},
@@ -32,8 +32,8 @@ config :tesla, MBTA.Connection,
   ]
 ```
 
-Caches are run and supervised separately.
-List all caches you want to access as child processes.
+Api caches are run separately.
+So, you need to list all of the api modules you want to access as child processes.
 In this example, we want access to Stop information.
 
 ```elixir
@@ -43,7 +43,7 @@ defmodule MyApp.Application do
   @impl true
   def start(_type, _args) do
     children = [
-      DotcomSdk.Cache.Stop
+      DOTCOM.Api.Stop
     ]
 
     opts = [strategy: :one_for_one, name: HelloMbta.Supervisor]
@@ -56,7 +56,7 @@ end
 
 ```elixir
 defmodule MyApp.Stop do
-  alias DotcomSdk.Cache.Stop
+  alias DOTCOM.Api.Stop
 
   @client MBTA.Connection.new()
 

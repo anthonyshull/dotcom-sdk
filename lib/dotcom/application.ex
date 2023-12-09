@@ -1,4 +1,4 @@
-defmodule DotcomSdk.Application do
+defmodule DOTCOM.Application do
   @moduledoc false
 
   use Application
@@ -6,7 +6,7 @@ defmodule DotcomSdk.Application do
   @impl true
   def start(_type, _args) do
     Supervisor.start_link(
-      [{DynamicSupervisor, strategy: :one_for_one, name: DotcomSdk.DynamicSupervisor}],
+      [{DynamicSupervisor, strategy: :one_for_one, name: DOTCOM.DynamicSupervisor}],
       strategy: :one_for_one
     )
   end

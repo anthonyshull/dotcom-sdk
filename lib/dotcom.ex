@@ -1,3 +1,3 @@
-defmodule DotcomSdk do
+defmodule DOTCOM do
   @moduledoc false
 end

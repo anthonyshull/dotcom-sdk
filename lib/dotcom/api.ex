@@ -1,4 +1,4 @@
-defmodule DotcomSdk.Cache do
+defmodule DOTCOM.Api do
   @moduledoc false
 
   api_modules =
