@@ -22,22 +22,14 @@ defmodule DOTCOM.Api do
       quote do
         use Nebulex.Cache,
           otp_app: unquote(dotcom_module),
-          adapter: NebulexRedisAdapter,
-          default_key_generator: unquote(dotcom_module)
-
-        use Nebulex.Caching
-
-        @behaviour Nebulex.Caching.KeyGenerator
-
-        @impl true
-        def generate(mod, fun, args), do: :erlang.phash2({mod, fun, args})
+          adapter: NebulexRedisAdapter
 
         defp ttl(mod, fun) do
           mod_atom =
             mod
             |> Atom.to_string()
             |> String.split(".")
-            |> (fn [head | tail] -> tail end).()
+            |> Kernel.tl()
             |> Enum.join("_")
             |> String.downcase()
             |> String.to_atom()
@@ -49,16 +41,25 @@ defmodule DOTCOM.Api do
         unquote do
           for {fun, arity} <- api_module.__info__(:functions) do
             quote do
-              @decorate cacheable(
-                          cache: __MODULE__,
-                          opts: [ttl: ttl(unquote(dotcom_module), unquote(fun))]
-                        )
-              def unquote(fun)(unquote_splicing(Macro.generate_arguments(arity, __MODULE__))) do
-                case unquote(api_module).unquote(fun)(
-                       unquote_splicing(Macro.generate_arguments(arity, __MODULE__))
-                     ) do
-                  {:ok, result} -> result
-                  {:error, error} -> nil
+              def unquote(fun)(unquote_splicing(Macro.generate_arguments(arity, dotcom_module))) do
+                args = unquote(Macro.generate_arguments(arity, dotcom_module)) |> Kernel.tl()
+
+                key = :erlang.phash2({unquote(dotcom_module), unquote(fun), args})
+
+                if value = unquote(dotcom_module).get(key) do
+                  value
+                else
+                  case unquote(api_module).unquote(fun)(
+                         unquote_splicing(Macro.generate_arguments(arity, dotcom_module))
+                       ) do
+                    {:ok, result} ->
+                      unquote(dotcom_module).put(key, result)
+
+                      result
+
+                    {:error, error} ->
+                      nil
+                  end
                 end
               end
             end
