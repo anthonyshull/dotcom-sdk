@@ -55,10 +55,10 @@ defmodule DOTCOM.Api do
                     {:ok, result} ->
                       unquote(dotcom_module).put(key, result)
 
-                      result
+                      {:ok, result}
 
                     {:error, error} ->
-                      nil
+                      {:error, error}
                   end
                 end
               end
